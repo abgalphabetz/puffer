@@ -1,4 +1,4 @@
-# puffer
+# Puffer - Kata in Python
 
 Puffer is a project template for people who want to sharpen their python skills through a series of [kata](https://en.wikipedia.org/wiki/Kata_(programming)).
 
