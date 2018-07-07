@@ -55,7 +55,7 @@ def test_reverse():
     skip("IMPLEMENT ME!!!")
 
 
-def test_reverse():
+def test_palindrome():
     """
     P06 (*) Find out whether a list is a palindrome.
     """
