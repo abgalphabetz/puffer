@@ -1,6 +1,10 @@
 import pytest
 from pytest import skip
-from src.puffer.kata.p99.lists import find_last, find_last_diy, find_last_but_one
+from src.puffer.kata.p99.lists import find_last, find_last_diy, find_last_but_one, element_at, element_at_diy, \
+    num_of_elements, num_of_elements_diy
+
+ints = [1, 2, 3, 4]
+chars = ['a', 'b', 'c', 'd']
 
 
 @pytest.mark.parametrize("func", [find_last, find_last_diy])
@@ -11,8 +15,6 @@ def test_find_last(func):
     ?- my_last(X,[a,b,c,d]).
     X = d
     """
-    ints = [1, 2, 3, 4]
-    chars = ['a', 'b', 'c', 'd']
 
     assert func(ints) == 4
     assert func(chars) == 'd'
@@ -23,14 +25,13 @@ def test_find_last_but_one():
     P02 (*) Find the last but one element of a list.
     (zweitletztes Element, l'avant-dernier élément)
     """
-    ints = [1, 2, 3, 4]
-    chars = ['a', 'b', 'c', 'd']
 
     assert find_last_but_one(ints) == 3
     assert find_last_but_one(chars) == 'c'
 
 
-def test_element_at():
+@pytest.mark.parametrize("func", [element_at, element_at_diy])
+def test_element_at(func):
     """
     P03 (*) Find the K'th element of a list.
     The first element in the list is number 1.
@@ -38,14 +39,17 @@ def test_element_at():
     ?- element_at(X,[a,b,c,d,e],3).
     X = c
     """
-    skip("IMPLEMENT ME!!!")
+    assert func(ints, 3) == 3
+    assert func(chars, 3) == 'c'
 
 
-def test_num_of_elements():
+@pytest.mark.parametrize("func", [num_of_elements, num_of_elements_diy])
+def test_num_of_elements(func):
     """
     P04 (*) Find the number of elements of a list.
     """
-    skip("IMPLEMENT ME!!!")
+    assert func(ints) == 4
+    assert func(chars) == 4
 
 
 def test_reverse():
