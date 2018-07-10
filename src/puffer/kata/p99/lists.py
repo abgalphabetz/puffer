@@ -77,13 +77,5 @@ def flatten(given: List):
 
 
 def compress(given: List):
-    result = []
-    last = None
-    for elem in given:
-        if elem != last:
-            result.append(elem)
-            last = elem
-        else:
-            continue
-
-    return result
+    from functools import reduce
+    return reduce(lambda x, y: x if x and x[-1] == y else x + [y], given, [])
