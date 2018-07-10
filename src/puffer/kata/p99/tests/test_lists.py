@@ -1,37 +1,56 @@
+from typing import List
+
 import pytest
 from pytest import skip
 from src.puffer.kata.p99.lists import find_last, find_last_diy, find_last_but_one, element_at, element_at_diy, \
-    num_of_elements, num_of_elements_diy
+    num_of_elements, num_of_elements_diy, reverse, reverse_diy, is_palindrome, flatten, compress
 
 ints = [1, 2, 3, 4]
 chars = ['a', 'b', 'c', 'd']
 
 
-@pytest.mark.parametrize("func", [find_last, find_last_diy])
-def test_find_last(func):
+def ensure_immutable(func, given, expected):
+    copy = given.copy()
+    assert expected == func(given)
+    assert given == copy
+
+
+@pytest.mark.parametrize("func, given, expected", [
+    (find_last, ints, 4),
+    (find_last, chars, 'd'),
+    (find_last_diy, ints, 4),
+    (find_last_diy, chars, 'd')
+])
+def test_find_last(func, given: List, expected):
     """
     P01 (*) Find the last element of a list.
     Example:
     ?- my_last(X,[a,b,c,d]).
     X = d
     """
-
-    assert func(ints) == 4
-    assert func(chars) == 'd'
+    ensure_immutable(func, given, expected)
 
 
-def test_find_last_but_one():
+@pytest.mark.parametrize("func, given, expected", [
+    (find_last_but_one, ints, 3),
+    (find_last_but_one, chars, 'c')
+])
+def test_find_last_but_one(func, given, expected):
     """
     P02 (*) Find the last but one element of a list.
     (zweitletztes Element, l'avant-dernier élément)
     """
 
-    assert find_last_but_one(ints) == 3
-    assert find_last_but_one(chars) == 'c'
+    ensure_immutable(func, given, expected)
 
 
-@pytest.mark.parametrize("func", [element_at, element_at_diy])
-def test_element_at(func):
+@pytest.mark.parametrize("func, given, i, expected", [
+    (element_at, ints, 3, 3),
+    (element_at_diy, ints, 3, 3),
+    (element_at, chars, 3, 'c'),
+    (element_at_diy, chars, 3, 'c')
+])
+def test_element_at(func, given, i, expected):
     """
     P03 (*) Find the K'th element of a list.
     The first element in the list is number 1.
@@ -39,34 +58,53 @@ def test_element_at(func):
     ?- element_at(X,[a,b,c,d,e],3).
     X = c
     """
-    assert func(ints, 3) == 3
-    assert func(chars, 3) == 'c'
+    ensure_immutable(lambda l: func(l, i), given, expected)
 
 
-@pytest.mark.parametrize("func", [num_of_elements, num_of_elements_diy])
-def test_num_of_elements(func):
+@pytest.mark.parametrize("func, given, expected", [
+    (num_of_elements, ints, 4),
+    (num_of_elements_diy, ints, 4),
+    (num_of_elements, chars, 4),
+    (num_of_elements_diy, chars, 4)
+])
+def test_num_of_elements(func, given, expected):
     """
     P04 (*) Find the number of elements of a list.
     """
-    assert func(ints) == 4
-    assert func(chars) == 4
+    ensure_immutable(func, given, expected)
 
 
-def test_reverse():
+@pytest.mark.parametrize("func, given, expected", [
+    (reverse, ints, [4, 3, 2, 1]),
+    (reverse_diy, ints, [4, 3, 2, 1]),
+    (reverse, chars, ['d', 'c', 'b', 'a']),
+    (reverse_diy, chars, ['d', 'c', 'b', 'a'])
+])
+def test_reverse(func, given, expected):
     """
     P05 (*) Reverse a list.
     """
-    skip("IMPLEMENT ME!!!")
+    ensure_immutable(func, given, expected)
 
 
-def test_palindrome():
+@pytest.mark.parametrize("func, given, expected", [
+    (is_palindrome, ints, False),
+    (is_palindrome, [1, 2, 3, 2, 1], True),
+    (is_palindrome, chars, False),
+    (is_palindrome, ['a', 'b', 'c', 'b', 'a'], True),
+])
+def test_palindrome(func, given, expected):
     """
     P06 (*) Find out whether a list is a palindrome.
     """
-    skip("IMPLEMENT ME!!!")
+    ensure_immutable(func, given, expected)
 
 
-def test_flatten():
+@pytest.mark.parametrize("func, given, expected", [
+    (flatten, ['a', ['b', ['c', 'd'], 'e']], ['a', 'b', 'c', 'd', 'e']),
+    (flatten, [['a', 'b'], [['c', 'd'], 'e']], ['a', 'b', 'c', 'd', 'e'])
+])
+def test_flatten(func, given, expected):
     """
     A palindrome can be read forward or backward; e.g. [x,a,m,a,x].
     P07 (**) Flatten a nested list structure.
@@ -78,10 +116,13 @@ def test_flatten():
 
     Hint: Use the predefined predicates is_list/1 and append/3
     """
-    skip("IMPLEMENT ME!!!")
+    ensure_immutable(func, given, expected)
 
 
-def test_compress():
+@pytest.mark.parametrize("func, given, expected", [
+    (compress, ['a', 'a', 'a', 'a', 'b', 'c', 'c', 'a', 'a', 'd', 'e', 'e', 'e', 'e'], ['a', 'b', 'c', 'a', 'd', 'e']),
+])
+def test_compress(func, given, expected):
     """
     P08 (**) Eliminate consecutive duplicates of list elements.
     If a list contains repeated elements they should be replaced with a single copy of the element. The order of the elements should not be changed.
@@ -90,7 +131,7 @@ def test_compress():
     ?- compress([a,a,a,a,b,c,c,a,a,d,e,e,e,e],X).
     X = [a,b,c,a,d,e]
     """
-    skip("IMPLEMENT ME!!!")
+    ensure_immutable(func, given, expected)
 
 
 def test_pack():

@@ -16,7 +16,9 @@ def find_last_diy(given: List):
 
 
 def find_last_but_one(given: List):
-    return find_last(given.copy().pop())
+    copy = given.copy()
+    copy.pop()
+    return find_last(copy)
 
 
 def element_at(given: List, i: int):
@@ -42,3 +44,46 @@ def num_of_elements_diy(given: List):
     return n
 
 
+def reverse(given: List):
+    return list(reversed(given))
+
+
+def reverse_diy(given: List):
+    result = [None] * len(given)
+    for i, elem in enumerate(given):
+        result[-(i+1)] = elem
+
+    return result
+
+
+def is_palindrome(given: List):
+    half = int(len(given) / 2)
+    for i in range(0,half):
+        if given[i] != given[-(i+1)]:
+            return False
+    return True
+
+
+def flatten(given: List):
+    result = []
+    for elem in given:
+        if isinstance(elem, List):
+            for _elem in flatten(elem):
+                result.append(_elem)
+        else:
+            result.append(elem)
+
+    return result
+
+
+def compress(given: List):
+    result = []
+    last = None
+    for elem in given:
+        if elem != last:
+            result.append(elem)
+            last = elem
+        else:
+            continue
+
+    return result
