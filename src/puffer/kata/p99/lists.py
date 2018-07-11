@@ -1,11 +1,11 @@
 from typing import List
 
 
-def find_last(given: List):
+def find_last_pythonic(given: List):
     return given[-1]
 
 
-def find_last_diy(given: List):
+def find_last(given: List):
     def _find(_next: List):
         if len(_next) == 1:
             return _next.pop()
@@ -18,14 +18,14 @@ def find_last_diy(given: List):
 def find_last_but_one(given: List):
     copy = given.copy()
     copy.pop()
-    return find_last(copy)
+    return find_last_pythonic(copy)
 
 
-def element_at(given: List, i: int):
+def element_at_pythonic(given: List, i: int):
     return given[i-1]
 
 
-def element_at_diy(given: List, i: int):
+def element_at(given: List, i: int):
     for j, elem in enumerate(given):
         if j+1 == i:
             return elem
@@ -33,11 +33,11 @@ def element_at_diy(given: List, i: int):
     raise ValueError
 
 
-def num_of_elements(given: List):
+def num_of_elements_pythonic(given: List):
     return len(given)
 
 
-def num_of_elements_diy(given: List):
+def num_of_elements(given: List):
     n = 0
     for _ in given:
         n += 1
@@ -79,3 +79,16 @@ def flatten(given: List):
 def compress(given: List):
     from functools import reduce
     return reduce(lambda x, y: x if x and x[-1] == y else x + [y], given, [])
+
+
+def pack(given: List):
+    def _append(alist: List, elem) -> List:
+        alist[-1].append(elem)
+        return alist
+
+    def _new(alist: List, elem) -> List:
+        alist.append([elem])
+        return alist
+
+    from functools import reduce
+    return reduce(lambda x, y: _append(x, y) if x and x[-1] and x[-1][-1] == y else _new(x, y), given, [])

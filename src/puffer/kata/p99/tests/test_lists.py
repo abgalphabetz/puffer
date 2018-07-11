@@ -2,8 +2,8 @@ from typing import List
 
 import pytest
 from pytest import skip
-from src.puffer.kata.p99.lists import find_last, find_last_diy, find_last_but_one, element_at, element_at_diy, \
-    num_of_elements, num_of_elements_diy, reverse, reverse_diy, is_palindrome, flatten, compress
+from src.puffer.kata.p99.lists import find_last_pythonic, find_last, find_last_but_one, element_at_pythonic, element_at, \
+    num_of_elements_pythonic, num_of_elements, reverse, reverse_diy, is_palindrome, flatten, compress, pack
 
 ints = [1, 2, 3, 4]
 chars = ['a', 'b', 'c', 'd']
@@ -16,10 +16,10 @@ def ensure_immutable(func, given, expected):
 
 
 @pytest.mark.parametrize("func, given, expected", [
+    (find_last_pythonic, ints, 4),
+    (find_last_pythonic, chars, 'd'),
     (find_last, ints, 4),
-    (find_last, chars, 'd'),
-    (find_last_diy, ints, 4),
-    (find_last_diy, chars, 'd')
+    (find_last, chars, 'd')
 ])
 def test_find_last(func, given: List, expected):
     """
@@ -45,10 +45,10 @@ def test_find_last_but_one(func, given, expected):
 
 
 @pytest.mark.parametrize("func, given, i, expected", [
+    (element_at_pythonic, ints, 3, 3),
     (element_at, ints, 3, 3),
-    (element_at_diy, ints, 3, 3),
-    (element_at, chars, 3, 'c'),
-    (element_at_diy, chars, 3, 'c')
+    (element_at_pythonic, chars, 3, 'c'),
+    (element_at, chars, 3, 'c')
 ])
 def test_element_at(func, given, i, expected):
     """
@@ -62,10 +62,10 @@ def test_element_at(func, given, i, expected):
 
 
 @pytest.mark.parametrize("func, given, expected", [
+    (num_of_elements_pythonic, ints, 4),
     (num_of_elements, ints, 4),
-    (num_of_elements_diy, ints, 4),
-    (num_of_elements, chars, 4),
-    (num_of_elements_diy, chars, 4)
+    (num_of_elements_pythonic, chars, 4),
+    (num_of_elements, chars, 4)
 ])
 def test_num_of_elements(func, given, expected):
     """
@@ -121,6 +121,7 @@ def test_flatten(func, given, expected):
 
 @pytest.mark.parametrize("func, given, expected", [
     (compress, ['a', 'a', 'a', 'a', 'b', 'c', 'c', 'a', 'a', 'd', 'e', 'e', 'e', 'e'], ['a', 'b', 'c', 'a', 'd', 'e']),
+    (compress, ['a', 'b', 'c', 'a', 'd', 'e'], ['a', 'b', 'c', 'a', 'd', 'e']),
 ])
 def test_compress(func, given, expected):
     """
@@ -134,7 +135,10 @@ def test_compress(func, given, expected):
     ensure_immutable(func, given, expected)
 
 
-def test_pack():
+@pytest.mark.parametrize(("func", "given", "expected"), [
+    (pack, ['a', 'a', 'a', 'a', 'b', 'c', 'c', 'a', 'a', 'd', 'e', 'e', 'e', 'e'], [['a', 'a', 'a', 'a'], ['b'], ['c', 'c'], ['a', 'a'], ['d'], ['e', 'e', 'e', 'e']]),
+])
+def test_pack(func, given, expected):
     """
     P09 (**) Pack consecutive duplicates of list elements into sublists.
     If a list contains repeated elements they should be placed in separate sublists.
@@ -143,7 +147,7 @@ def test_pack():
     ?- pack([a,a,a,a,b,c,c,a,a,d,e,e,e,e],X).
     X = [[a,a,a,a],[b],[c,c],[a,a],[d],[e,e,e,e]]
     """
-    skip("IMPLEMENT ME!!!")
+    ensure_immutable(func, given, expected)
 
 
 def test_encode():
