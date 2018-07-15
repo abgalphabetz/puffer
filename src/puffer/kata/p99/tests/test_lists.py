@@ -3,7 +3,11 @@ from typing import List
 import pytest
 from pytest import skip
 from src.puffer.kata.p99.lists import find_last_pythonic, find_last, find_last_but_one, element_at_pythonic, element_at, \
-    num_of_elements_pythonic, num_of_elements, reverse, reverse_diy, is_palindrome, flatten, compress, pack
+    num_of_elements_pythonic, num_of_elements, reverse_pythonic, reverse, is_palindrome, flatten, compress, pack, \
+    pack_pythonic, compress_pythonic, encode_pythonic, encode, encode_modified_pythonic, encode_modified, \
+    decode_pythonic, decode, encode_direct_pythonic, duplicate_pythonic, duplicate, drop_pythonic, drop, split, \
+    split_pythonic, slice_pythonic, slice_diy, rotate, rotate_pythonic, remove_at_pythonic, remove_at, \
+    insert_at_pythonic, insert_at
 
 ints = [1, 2, 3, 4]
 chars = ['a', 'b', 'c', 'd']
@@ -75,10 +79,10 @@ def test_num_of_elements(func, given, expected):
 
 
 @pytest.mark.parametrize("func, given, expected", [
+    (reverse_pythonic, ints, [4, 3, 2, 1]),
     (reverse, ints, [4, 3, 2, 1]),
-    (reverse_diy, ints, [4, 3, 2, 1]),
-    (reverse, chars, ['d', 'c', 'b', 'a']),
-    (reverse_diy, chars, ['d', 'c', 'b', 'a'])
+    (reverse_pythonic, chars, ['d', 'c', 'b', 'a']),
+    (reverse, chars, ['d', 'c', 'b', 'a'])
 ])
 def test_reverse(func, given, expected):
     """
@@ -120,6 +124,9 @@ def test_flatten(func, given, expected):
 
 
 @pytest.mark.parametrize("func, given, expected", [
+    (compress_pythonic, ['a', 'a', 'a', 'a', 'b', 'c', 'c', 'a', 'a', 'd', 'e', 'e', 'e', 'e'],
+     ['a', 'b', 'c', 'a', 'd', 'e']),
+    (compress_pythonic, ['a', 'b', 'c', 'a', 'd', 'e'], ['a', 'b', 'c', 'a', 'd', 'e']),
     (compress, ['a', 'a', 'a', 'a', 'b', 'c', 'c', 'a', 'a', 'd', 'e', 'e', 'e', 'e'], ['a', 'b', 'c', 'a', 'd', 'e']),
     (compress, ['a', 'b', 'c', 'a', 'd', 'e'], ['a', 'b', 'c', 'a', 'd', 'e']),
 ])
@@ -136,7 +143,10 @@ def test_compress(func, given, expected):
 
 
 @pytest.mark.parametrize(("func", "given", "expected"), [
-    (pack, ['a', 'a', 'a', 'a', 'b', 'c', 'c', 'a', 'a', 'd', 'e', 'e', 'e', 'e'], [['a', 'a', 'a', 'a'], ['b'], ['c', 'c'], ['a', 'a'], ['d'], ['e', 'e', 'e', 'e']]),
+    (pack_pythonic, ['a', 'a', 'a', 'a', 'b', 'c', 'c', 'a', 'a', 'd', 'e', 'e', 'e', 'e'],
+     [['a', 'a', 'a', 'a'], ['b'], ['c', 'c'], ['a', 'a'], ['d'], ['e', 'e', 'e', 'e']]),
+    (pack, ['a', 'a', 'a', 'a', 'b', 'c', 'c', 'a', 'a', 'd', 'e', 'e', 'e', 'e'],
+     [['a', 'a', 'a', 'a'], ['b'], ['c', 'c'], ['a', 'a'], ['d'], ['e', 'e', 'e', 'e']]),
 ])
 def test_pack(func, given, expected):
     """
@@ -150,7 +160,13 @@ def test_pack(func, given, expected):
     ensure_immutable(func, given, expected)
 
 
-def test_encode():
+@pytest.mark.parametrize(("func", "given", "expected"), [
+    (encode_pythonic, ['a', 'a', 'a', 'a', 'b', 'c', 'c', 'a', 'a', 'd', 'e', 'e', 'e', 'e'],
+     [[4, 'a'], [1, 'b'], [2, 'c'], [2, 'a'], [1, 'd'], [4, 'e']]),
+    (encode, ['a', 'a', 'a', 'a', 'b', 'c', 'c', 'a', 'a', 'd', 'e', 'e', 'e', 'e'],
+     [[4, 'a'], [1, 'b'], [2, 'c'], [2, 'a'], [1, 'd'], [4, 'e']]),
+])
+def test_encode(func, given, expected):
     """
     P10 (*) Run-length encoding of a list.
     Use the result of problem P09 to implement the so-called run-length encoding data compression method. Consecutive duplicates of elements are encoded as terms [N,E] where N is the number of duplicates of the element E.
@@ -159,10 +175,16 @@ def test_encode():
     ?- encode([a,a,a,a,b,c,c,a,a,d,e,e,e,e],X).
     X = [[4,a],[1,b],[2,c],[2,a],[1,d][4,e]]
     """
-    skip("IMPLEMENT ME!!!")
+    ensure_immutable(func, given, expected)
 
 
-def test_encode_modified():
+@pytest.mark.parametrize(("func", "given", "expected"), [
+    (encode_modified_pythonic, ['a', 'a', 'a', 'a', 'b', 'c', 'c', 'a', 'a', 'd', 'e', 'e', 'e', 'e'],
+     [[4, 'a'], 'b', [2, 'c'], [2, 'a'], 'd', [4, 'e']]),
+    (encode_modified, ['a', 'a', 'a', 'a', 'b', 'c', 'c', 'a', 'a', 'd', 'e', 'e', 'e', 'e'],
+     [[4, 'a'], 'b', [2, 'c'], [2, 'a'], 'd', [4, 'e']]),
+])
+def test_encode_modified(func, given, expected):
     """
     P11 (*) Modified run-length encoding.
     Modify the result of problem P10 in such a way that if an element has no duplicates it is simply copied into the result list. Only elements with duplicates are transferred as [N,E] terms.
@@ -171,18 +193,28 @@ def test_encode_modified():
     ?- encode_modified([a,a,a,a,b,c,c,a,a,d,e,e,e,e],X).
     X = [[4,a],b,[2,c],[2,a],d,[4,e]]
     """
-    skip("IMPLEMENT ME!!!")
+    ensure_immutable(func, given, expected)
 
 
-def test_decode():
+@pytest.mark.parametrize(("func", "given", "expected"), [
+    (decode_pythonic, [[4, 'a'], 'b', [2, 'c'], [2, 'a'], 'd', [4, 'e']],
+     ['a', 'a', 'a', 'a', 'b', 'c', 'c', 'a', 'a', 'd', 'e', 'e', 'e', 'e']),
+    (decode, [[4, 'a'], 'b', [2, 'c'], [2, 'a'], 'd', [4, 'e']],
+     ['a', 'a', 'a', 'a', 'b', 'c', 'c', 'a', 'a', 'd', 'e', 'e', 'e', 'e']),
+])
+def test_decode(func, given, expected):
     """
     P12 (**) Decode a run-length encoded list.
     Given a run-length code list generated as specified in problem P11. Construct its uncompressed version.
     """
-    skip("IMPLEMENT ME!!!")
+    ensure_immutable(func, given, expected)
 
 
-def test_encode_direct():
+@pytest.mark.parametrize(("func", "given", "expected"), [
+    (encode_direct_pythonic, ['a', 'a', 'a', 'a', 'b', 'c', 'c', 'a', 'a', 'd', 'e', 'e', 'e', 'e'],
+     [[4, 'a'], 'b', [2, 'c'], [2, 'a'], 'd', [4, 'e']]),
+])
+def test_encode_direct(func, given, expected):
     """
     P13 (**) Run-length encoding of a list (direct solution).
     Implement the so-called run-length encoding data compression method directly. I.e. don't explicitly create the sublists containing the duplicates, as in problem P09, but only count them. As in problem P11, simplify the result list by replacing the singleton terms [1,X] by X.
@@ -191,20 +223,28 @@ def test_encode_direct():
     ?- encode_direct([a,a,a,a,b,c,c,a,a,d,e,e,e,e],X).
     X = [[4,a],b,[2,c],[2,a],d,[4,e]]
     """
-    skip("IMPLEMENT ME!!!")
+    ensure_immutable(func, given, expected)
 
 
-def test_duplicate():
+@pytest.mark.parametrize(("func", "given", "expected"), [
+    (duplicate_pythonic, ['a', 'b', 'c', 'd'], ['a', 'a', 'b', 'b', 'c', 'c', 'd', 'd']),
+    (duplicate, ['a', 'b', 'c', 'd'], ['a', 'a', 'b', 'b', 'c', 'c', 'd', 'd'])
+])
+def test_duplicate(func, given, expected):
     """
     P14 (*) Duplicate the elements of a list.
     Example:
     ?- dupli([a,b,c,c,d],X).
     X = [a,a,b,b,c,c,c,c,d,d]
     """
-    skip("IMPLEMENT ME!!!")
+    ensure_immutable(func, given, expected)
 
 
-def test_duplicate_with_times():
+@pytest.mark.parametrize(("func", "given", "expected"), [
+    (duplicate_pythonic, ['a', 'b', 'c'], ['a', 'a', 'a', 'b', 'b', 'b', 'c', 'c', 'c']),
+    (duplicate, ['a', 'b', 'c'], ['a', 'a', 'a', 'b', 'b', 'b', 'c', 'c', 'c'])
+])
+def test_duplicate_with_times(func, given, expected):
     """
     P15 (**) Duplicate the elements of a list a given number of times.
     Example:
@@ -214,20 +254,29 @@ def test_duplicate_with_times():
     What are the results of the goal:
     ?- dupli(X,3,Y).
     """
-    skip("IMPLEMENT ME!!!")
+    ensure_immutable(lambda l: func(l, 3), given, expected)
 
 
-def test_drop():
+@pytest.mark.parametrize(("func", "given", "expected"), [
+    (drop_pythonic, ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'k'], ['a', 'b', 'd', 'e', 'g', 'h', 'k']),
+    (drop, ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'k'], ['a', 'b', 'd', 'e', 'g', 'h', 'k']),
+])
+def test_drop(func, given, expected):
     """
     P16 (**) Drop every N'th element from a list.
     Example:
     ?- drop([a,b,c,d,e,f,g,h,i,k],3,X).
     X = [a,b,d,e,g,h,k]
     """
-    skip("IMPLEMENT ME!!!")
+    ensure_immutable(lambda l: func(l, 3), given, expected)
 
 
-def test_split():
+@pytest.mark.parametrize(("func", "given", "expected"), [
+    (split_pythonic, ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'k'],
+     (['a', 'b', 'c'], ['d', 'e', 'f', 'g', 'h', 'i', 'k'])),
+    (split, ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'k'], (['a', 'b', 'c'], ['d', 'e', 'f', 'g', 'h', 'i', 'k'])),
+])
+def test_split(func, given, expected):
     """
     P17 (*) Split a list into two parts; the length of the first part is given.
     Do not use any predefined predicates.
@@ -237,10 +286,14 @@ def test_split():
     L1 = [a,b,c]
     L2 = [d,e,f,g,h,i,k]
     """
-    skip("IMPLEMENT ME!!!")
+    ensure_immutable(lambda l: func(l, 3), given, expected)
 
 
-def test_slice():
+@pytest.mark.parametrize(("func", "given", 'expected'), [
+    (slice_pythonic, ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'k'], ['c', 'd', 'e', 'f', 'g']),
+    (slice_diy, ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'k'], ['c', 'd', 'e', 'f', 'g']),
+])
+def test_slice(func, given, expected):
     """
     P18 (**) Extract a slice from a list.
     Given two indices, I and K, the slice is the list containing the elements between the I'th and K'th element of the original list (both limits included). Start counting the elements with 1.
@@ -249,10 +302,16 @@ def test_slice():
     ?- slice([a,b,c,d,e,f,g,h,i,k],3,7,L).
     X = [c,d,e,f,g]
     """
-    skip("IMPLEMENT ME!!!")
+    ensure_immutable(lambda l: func(l, 3, 7), given, expected)
 
 
-def test_rotate():
+@pytest.mark.parametrize(("func", "given", "n", 'expected'), [
+    (rotate_pythonic, ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'], 3, ['d', 'e', 'f', 'g', 'h', 'a', 'b', 'c']),
+    (rotate, ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'], 3, ['d', 'e', 'f', 'g', 'h', 'a', 'b', 'c']),
+    (rotate_pythonic, ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'], -2, ['g', 'h', 'a', 'b', 'c', 'd', 'e', 'f']),
+    (rotate, ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'], -2, ['g', 'h', 'a', 'b', 'c', 'd', 'e', 'f']),
+])
+def test_rotate(func, given, n, expected):
     """
     P19 (**) Rotate a list N places to the left.
     Examples:
@@ -264,10 +323,14 @@ def test_rotate():
 
     Hint: Use the predefined predicates length/2 and append/3, as well as the result of problem P17.
     """
-    skip("IMPLEMENT ME!!!")
+    ensure_immutable(lambda l: func(l, n), given, expected)
 
 
-def test_remove_at():
+@pytest.mark.parametrize(("func", "given", "kth", 'expected'), [
+    (remove_at_pythonic, ['a', 'b', 'c', 'd'], 2, ['a', 'c', 'd']),
+    (remove_at, ['a', 'b', 'c', 'd'], 2, ['a', 'c', 'd']),
+])
+def test_remove_at(func, given, kth, expected):
     """
     P20 (*) Remove the K'th element from a list.
     Example:
@@ -275,17 +338,21 @@ def test_remove_at():
     X = b
     R = [a,c,d]
     """
-    skip("IMPLEMENT ME!!!")
+    ensure_immutable(lambda l: func(l, kth), given, expected)
 
 
-def test_insert_at():
+@pytest.mark.parametrize(("func", "given", "kth", 'expected'), [
+    (insert_at_pythonic, ['a', 'b', 'c', 'd'], 2, ['a', 'x', 'b', 'c', 'd']),
+    (insert_at, ['a', 'b', 'c', 'd'], 2, ['a', 'x', 'b', 'c', 'd']),
+])
+def test_insert_at(func, given, kth, expected):
     """
     P21 (*) Insert an element at a given position into a list.
     Example:
     ?- insert_at(alfa,[a,b,c,d],2,L).
     L = [a,alfa,b,c,d]
     """
-    skip("IMPLEMENT ME!!!")
+    ensure_immutable(lambda l: func('x', l, kth), given, expected)
 
 
 def test_range():
