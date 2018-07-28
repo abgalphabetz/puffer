@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Set, Sequence
 
 
 def find_last_pythonic(given: List):
@@ -291,3 +291,22 @@ def combination(given: List, r: int):
             return [[head] + s for s in _select(tail, _r - 1)] + _select(tail, _r)
 
     return _select(given, r)
+
+
+def _split(_given: List, n: int) -> List:
+    selected = combination(_given, n)
+    return [[s, list(set(_given) - set(s))] for s in selected]
+
+
+def group3(given: List, groups_of_3: List):
+    if len(groups_of_3) != 3 or len(given) != sum(groups_of_3):
+        raise ValueError
+
+    result = []
+    splits = _split(given, groups_of_3[0])
+    for s in splits:
+        s2 = _split(s[1], groups_of_3[1])
+        result.append([[s[0]] + ss for ss in s2])
+
+    flattened = [r[0] for r in result]
+    return flattened

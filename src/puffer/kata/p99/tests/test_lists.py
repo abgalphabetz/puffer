@@ -7,7 +7,7 @@ from src.puffer.kata.p99.lists import find_last_pythonic, find_last, find_last_b
     pack_pythonic, compress_pythonic, encode_pythonic, encode, encode_modified_pythonic, encode_modified, \
     decode_pythonic, decode, encode_direct_pythonic, duplicate_pythonic, duplicate, drop_pythonic, drop, split, \
     split_pythonic, slice_pythonic, slice_diy, rotate, rotate_pythonic, remove_at_pythonic, remove_at, \
-    insert_at_pythonic, insert_at, range_pythonic, rnd_select, rnd_permutation, combination
+    insert_at_pythonic, insert_at, range_pythonic, rnd_select, rnd_permutation, combination, group3
 
 ints = [1, 2, 3, 4]
 chars = ['a', 'b', 'c', 'd']
@@ -453,7 +453,11 @@ def test_combination(func, given, expected):
     assert len(actual) == expected
 
 
-def test_group3():
+@pytest.mark.parametrize(("func", "given", "grouping", "expected"), [
+    (group3, ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i'], (2, 3, 4), 36),
+    # (group, ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i'], (2, 3, 4), 36),
+])
+def test_group3(func, given, grouping, expected):
     """
     P27 (**) Group the elements of a set into disjoint subsets.
     a) In how many ways can a group of 9 people work in 3 disjoint subgroups of 2, 3 and 4 persons? Write a predicate that generates all the possibilities via backtracking.
@@ -474,7 +478,8 @@ def test_group3():
 
     You may find more about this combinatorial problem in a good book on discrete mathematics under the term "multinomial coefficients".
     """
-    skip("IMPLEMENT ME!!!")
+    actual = func(given, grouping)
+    assert len(actual) == expected
 
 
 def test_lsort():
