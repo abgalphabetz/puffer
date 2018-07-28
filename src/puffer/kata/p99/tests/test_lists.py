@@ -7,7 +7,7 @@ from src.puffer.kata.p99.lists import find_last_pythonic, find_last, find_last_b
     pack_pythonic, compress_pythonic, encode_pythonic, encode, encode_modified_pythonic, encode_modified, \
     decode_pythonic, decode, encode_direct_pythonic, duplicate_pythonic, duplicate, drop_pythonic, drop, split, \
     split_pythonic, slice_pythonic, slice_diy, rotate, rotate_pythonic, remove_at_pythonic, remove_at, \
-    insert_at_pythonic, insert_at
+    insert_at_pythonic, insert_at, range_pythonic, rnd_select, rnd_permutation, combination
 
 ints = [1, 2, 3, 4]
 chars = ['a', 'b', 'c', 'd']
@@ -355,17 +355,23 @@ def test_insert_at(func, given, kth, expected):
     ensure_immutable(lambda l: func('x', l, kth), given, expected)
 
 
-def test_range():
+@pytest.mark.parametrize(("func", "given", "expected"), [
+    (range_pythonic, (4, 9), [4, 5, 6, 7, 8, 9]),
+])
+def test_range(func, given, expected):
     """
     P22 (*) Create a list containing all integers within a given range.
     Example:
     ?- range(4,9,L).
     L = [4,5,6,7,8,9]
     """
-    skip("IMPLEMENT ME!!!")
+    assert func(*given) == expected
 
 
-def test_rnd_select():
+@pytest.mark.parametrize(("func", "given", "no_of_elements"), [
+    (rnd_select, ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'], 3),
+])
+def test_rnd_select(func, given, no_of_elements):
     """
     P23 (**) Extract a given number of randomly selected elements from a list.
     The selected items shall be put into a result list.
@@ -375,10 +381,19 @@ def test_rnd_select():
 
     Hint: Use the built-in random number generator random/2 and the result of problem P20.
     """
-    skip("IMPLEMENT ME!!!")
+    original = given.copy()
+    selected = func(given, no_of_elements)
+    actual = set(selected)
+    assert len(selected) == no_of_elements
+    assert len(actual) == no_of_elements
+    assert set(given) >= actual
+    assert given == original
 
 
-def test_rnd_select_n():
+@pytest.mark.parametrize(("func", "given_range", "no_of_elements"), [
+    (rnd_select, range(6, 49), 3),
+])
+def test_rnd_select_n(func, given_range, no_of_elements):
     """
     P24 (*) Lotto: Draw N different random numbers from the set 1..M.
     The selected numbers shall be put into a result list.
@@ -388,10 +403,20 @@ def test_rnd_select_n():
 
     Hint: Combine the solutions of problems P22 and P23.
     """
-    skip("IMPLEMENT ME!!!")
+    given = list(given_range)
+    original = given.copy()
+    selected = func(given, no_of_elements)
+    actual = set(selected)
+    assert len(selected) == no_of_elements
+    assert len(actual) == no_of_elements
+    assert set(given) >= actual
+    assert given == original
 
 
-def test_permutation():
+@pytest.mark.parametrize(("func", "given"), [
+    (rnd_permutation, ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'])
+])
+def test_permutation(func, given):
     """
     P25 (*) Generate a random permutation of the elements of a list.
     Example:
@@ -400,13 +425,22 @@ def test_permutation():
 
     Hint: Use the solution of problem P23.
     """
-    skip("IMPLEMENT ME!!!")
+    original = given.copy()
+    actual = func(given)
+    assert len(actual) == len(original)
+    assert set(given) == set(actual)
 
 
-def test_combination():
+@pytest.mark.parametrize(("func", "given", "expected"), [
+    (combination, ['a', 'b', 'c', 'd', 'e', 'f'], 20),
+    (combination, ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l'], 220),
+])
+def test_combination(func, given, expected):
     """
     P26 (**) Generate the combinations of K distinct objects chosen from the N elements of a list
-    In how many ways can a committee of 3 be chosen from a group of 12 people? We all know that there are C(12,3) = 220 possibilities (C(N,K) denotes the well-known binomial coefficients). For pure mathematicians, this result may be great. But we want to really generate all the possibilities (via backtracking).
+    In how many ways can a committee of 3 be chosen from a group of 12 people?
+    We all know that there are C(12,3) = 220 possibilities (C(N,K) denotes the well-known binomial coefficients).
+    For pure mathematicians, this result may be great. But we want to really generate all the possibilities (via backtracking).
 
     Example:
     ?- combination(3,[a,b,c,d,e,f],L).
@@ -415,7 +449,8 @@ def test_combination():
     L = [a,b,e] ;
     ...
     """
-    skip("IMPLEMENT ME!!!")
+    actual = func(given, 3)
+    assert len(actual) == expected
 
 
 def test_group3():

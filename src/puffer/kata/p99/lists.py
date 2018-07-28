@@ -199,13 +199,13 @@ def duplicate(given: List, times=2):
 
 
 def drop_pythonic(given: List, nth: int):
-    return [elem for i, elem in enumerate(given) if (i+1) % nth != 0]
+    return [elem for i, elem in enumerate(given) if (i + 1) % nth != 0]
 
 
 def drop(given: List, nth: int):
     result = []
     for i, elem in enumerate(given):
-        if (i+1) % nth != 0:
+        if (i + 1) % nth != 0:
             result.append(elem)
         else:
             continue
@@ -224,7 +224,7 @@ def split(given: List, n: int):
 
 
 def slice_pythonic(given: List, start: int, end: int):
-    return given[start-1:end]
+    return given[start - 1:end]
 
 
 def slice_diy(given: List, start: int, end: int):
@@ -242,19 +242,52 @@ def rotate(given: List, n: int):
 
 
 def remove_at_pythonic(given: List, kth: int):
-    return [x for i, x in enumerate(given) if i != kth-1]
+    return [x for i, x in enumerate(given) if i != kth - 1]
 
 
 def remove_at(given: List, kth: int):
-    ls = split(given, kth-1)
+    ls = split(given, kth - 1)
     return ls[0] + ls[1][1:]
 
 
 def insert_at_pythonic(elem, given: List, kth: int):
-    return given[:kth-1] + [elem] + given[kth-1:]
+    return given[:kth - 1] + [elem] + given[kth - 1:]
 
 
 def insert_at(elem, given: List, kth: int):
-    ls = split(given, kth-1)
+    ls = split(given, kth - 1)
     from itertools import chain
     return list(chain(ls[0], [elem], ls[1]))
+
+
+def range_pythonic(start: int, end: int):
+    return list(range(start, end + 1))
+
+
+def rnd_select(given: List, no_of_elements: int):
+    import random
+    return random.sample(given, no_of_elements)
+
+
+def rnd_permutation(given: List):
+    return rnd_select(given, len(given))
+
+
+def combination(given: List, r: int):
+    def _select(_given: List, _r):
+        if r <= 0 or not _given:
+            return [[]]
+
+        list_size = len(_given)
+        if list_size < _r:
+            return [[]]
+
+        if _r == 1:
+            return [[x] for x in _given]
+        elif list_size == _r:
+            return [_given]
+        else:
+            head, tail = _given[0], _given[1:]
+            return [[head] + s for s in _select(tail, _r - 1)] + _select(tail, _r)
+
+    return _select(given, r)
