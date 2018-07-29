@@ -1,13 +1,14 @@
 from typing import List
 
 import pytest
-from pytest import skip
+
 from src.puffer.kata.p99.lists import find_last_pythonic, find_last, find_last_but_one, element_at_pythonic, element_at, \
     num_of_elements_pythonic, num_of_elements, reverse_pythonic, reverse, is_palindrome, flatten, compress, pack, \
     pack_pythonic, compress_pythonic, encode_pythonic, encode, encode_modified_pythonic, encode_modified, \
     decode_pythonic, decode, encode_direct_pythonic, duplicate_pythonic, duplicate, drop_pythonic, drop, split, \
     split_pythonic, slice_pythonic, slice_diy, rotate, rotate_pythonic, remove_at_pythonic, remove_at, \
-    insert_at_pythonic, insert_at, range_pythonic, rnd_select, rnd_permutation, combination, group3, group, lsort_pythonic
+    insert_at_pythonic, insert_at, range_pythonic, rnd_select, rnd_permutation, combination, group3, group, \
+    lsort_pythonic, lfsort_pythonic
 
 ints = [1, 2, 3, 4]
 chars = ['a', 'b', 'c', 'd']
@@ -495,10 +496,10 @@ def test_group3(func, given, grouping, expected):
     assert given == original
 
 
-@pytest.mark.parametrize(("func", "given", "expected"), [
-    (lsort_pythonic, [['a', 'b', 'c'], ['d', 'e'], ['f', 'g', 'h'], ['d', 'e'], ['i', 'j', 'k', 'l'], ['m', 'n'], ['o']], [1, 2, 2, 2, 3, 3, 4]),
+@pytest.mark.parametrize(("given", "expected"), [
+    ([['a', 'b', 'c'], ['d', 'e'], ['f', 'g', 'h'], ['d', 'e'], ['i', 'j', 'k', 'l'], ['m', 'n'], ['o']], [1, 2, 2, 2, 3, 3, 4]),
 ])
-def test_lsort(func, given, expected):
+def test_lsort(given, expected):
     """
     P28 (**) Sorting a list of lists according to length of sublists
     a) We suppose that a list (InList) contains elements that are lists themselves.
@@ -521,6 +522,11 @@ def test_lsort(func, given, expected):
     And finally, the last three lists have length 2. This is the most frequent length.
     """
     original = given.copy()
-    actual = func(given)
-    assert [len(l) for l in actual] == expected
+    actual = lsort_pythonic(given)
+    assert [len(l) for l in actual] == [1, 2, 2, 2, 3, 3, 4]
     assert given == original
+
+    actual = lfsort_pythonic(given)
+    assert [len(l) for l in actual] == reverse([1, 2, 2, 2, 3, 3, 4])
+    assert given == original
+

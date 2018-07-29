@@ -336,3 +336,11 @@ def group(given: List, groups: List):
 
 def lsort_pythonic(given: List):
     return sorted(given, key=lambda x: len(x))
+
+
+def lfsort_pythonic(given: List):
+    l = [len(x) for x in given]
+    f = [(z[0], z[1]) for z in zip(given, l)]
+
+    s = sorted(f, key=lambda item: -item[1])
+    return [i for i, f in s]
