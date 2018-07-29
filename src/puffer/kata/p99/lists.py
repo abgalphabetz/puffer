@@ -295,7 +295,8 @@ def combination(given: List, r: int):
 
 def _split(_given: List, n: int) -> List:
     selected = combination(_given, n)
-    return [[s, list(set(_given) - set(s))] for s in selected]
+    result = [[s, list(set(_given) - set(s))] for s in selected]
+    return result
 
 
 def group3(given: List, groups_of_3: List):
@@ -316,16 +317,17 @@ def group(given: List, groups: List):
     def _group(_given: List, _groups: List):
         if not _groups:
             return [[[]]]
-        elif len(_groups) == 1:
-            return [[_given]]
 
         head, tail = _groups[0], _groups[1:]
         splits = _split(_given, head)
-        result = list(map(lambda s: [[s[0]] + g for g in group(s[-1], tail)], splits))
+        m = list(map(lambda s: [[s[0]] + g for g in group(s[-1], tail)], splits))
+        result = m
         return result
 
     if len(given) != sum(groups):
         raise ValueError
+    elif len(groups) == 1:
+        return [[given]]
 
     grouped = _group(given, groups)
     flattened = [g[0] for g in grouped]
