@@ -7,7 +7,7 @@ from src.puffer.kata.p99.lists import find_last_pythonic, find_last, find_last_b
     pack_pythonic, compress_pythonic, encode_pythonic, encode, encode_modified_pythonic, encode_modified, \
     decode_pythonic, decode, encode_direct_pythonic, duplicate_pythonic, duplicate, drop_pythonic, drop, split, \
     split_pythonic, slice_pythonic, slice_diy, rotate, rotate_pythonic, remove_at_pythonic, remove_at, \
-    insert_at_pythonic, insert_at, range_pythonic, rnd_select, rnd_permutation, combination, group3, group
+    insert_at_pythonic, insert_at, range_pythonic, rnd_select, rnd_permutation, combination, group3, group, lsort_pythonic
 
 ints = [1, 2, 3, 4]
 chars = ['a', 'b', 'c', 'd']
@@ -495,7 +495,10 @@ def test_group3(func, given, grouping, expected):
     assert given == original
 
 
-def test_lsort():
+@pytest.mark.parametrize(("func", "given", "expected"), [
+    (lsort_pythonic, [['a', 'b', 'c'], ['d', 'e'], ['f', 'g', 'h'], ['d', 'e'], ['i', 'j', 'k', 'l'], ['m', 'n'], ['o']], [1, 2, 2, 2, 3, 3, 4]),
+])
+def test_lsort(func, given, expected):
     """
     P28 (**) Sorting a list of lists according to length of sublists
     a) We suppose that a list (InList) contains elements that are lists themselves.
@@ -517,4 +520,7 @@ def test_lsort():
     The third and forth list have length 3 which appears, there are two list of this length.
     And finally, the last three lists have length 2. This is the most frequent length.
     """
-    skip("IMPLEMENT ME!!!")
+    original = given.copy()
+    actual = func(given)
+    assert [len(l) for l in actual] == expected
+    assert given == original

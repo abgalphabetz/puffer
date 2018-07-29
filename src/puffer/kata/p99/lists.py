@@ -332,3 +332,7 @@ def group(given: List, groups: List):
     grouped = _group(given, groups)
     flattened = [g[0] for g in grouped]
     return flattened
+
+
+def lsort_pythonic(given: List):
+    return sorted(given, key=lambda x: len(x))
