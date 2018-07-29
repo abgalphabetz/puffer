@@ -457,6 +457,9 @@ def test_combination(func, given, expected):
     (group3, ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i'], (2, 3, 4), 36),
     (group, ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i'], (2, 3, 4), 36),
     (group, ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i'], (2, 2, 2, 3), 36),
+    (group, ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i'], (1, 8), 9),
+    (group, ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i'], (8, 1), 9),
+    (group, ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i'], (9,), 1),
 ])
 def test_group3(func, given, grouping, expected):
     """
