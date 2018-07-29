@@ -7,7 +7,7 @@ from src.puffer.kata.p99.lists import find_last_pythonic, find_last, find_last_b
     pack_pythonic, compress_pythonic, encode_pythonic, encode, encode_modified_pythonic, encode_modified, \
     decode_pythonic, decode, encode_direct_pythonic, duplicate_pythonic, duplicate, drop_pythonic, drop, split, \
     split_pythonic, slice_pythonic, slice_diy, rotate, rotate_pythonic, remove_at_pythonic, remove_at, \
-    insert_at_pythonic, insert_at, range_pythonic, rnd_select, rnd_permutation, combination, group3
+    insert_at_pythonic, insert_at, range_pythonic, rnd_select, rnd_permutation, combination, group3, group
 
 ints = [1, 2, 3, 4]
 chars = ['a', 'b', 'c', 'd']
@@ -455,7 +455,8 @@ def test_combination(func, given, expected):
 
 @pytest.mark.parametrize(("func", "given", "grouping", "expected"), [
     (group3, ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i'], (2, 3, 4), 36),
-    # (group, ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i'], (2, 3, 4), 36),
+    (group, ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i'], (2, 3, 4), 36),
+    (group, ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i'], (2, 2, 2, 3), 36),
 ])
 def test_group3(func, given, grouping, expected):
     """
