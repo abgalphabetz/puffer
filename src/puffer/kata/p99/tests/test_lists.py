@@ -449,8 +449,10 @@ def test_combination(func, given, expected):
     L = [a,b,e] ;
     ...
     """
+    original = given.copy()
     actual = func(given, 3)
     assert len(actual) == expected
+    assert given == original
 
 
 @pytest.mark.parametrize(("func", "given", "grouping", "expected"), [
@@ -467,7 +469,8 @@ def test_combination(func, given, expected):
 def test_group3(func, given, grouping, expected):
     """
     P27 (**) Group the elements of a set into disjoint subsets.
-    a) In how many ways can a group of 9 people work in 3 disjoint subgroups of 2, 3 and 4 persons? Write a predicate that generates all the possibilities via backtracking.
+    a) In how many ways can a group of 9 people work in 3 disjoint subgroups of 2, 3 and 4 persons?
+    Write a predicate that generates all the possibilities via backtracking.
 
     Example:
     ?- group3([aldo,beat,carla,david,evi,flip,gary,hugo,ida],G1,G2,G3).
@@ -481,29 +484,37 @@ def test_group3(func, given, grouping, expected):
     Gs = [[aldo,beat],[carla,david],[evi,flip,gary,hugo,ida]]
     ...
 
-    Note that we do not want permutations of the group members; i.e. [[aldo,beat],...] is the same solution as [[beat,aldo],...]. However, we make a difference between [[aldo,beat],[carla,david],...] and [[carla,david],[aldo,beat],...].
+    Note that we do not want permutations of the group members; i.e. [[aldo,beat],...] is the same solution as [[beat,aldo],...].
+    However, we make a difference between [[aldo,beat],[carla,david],...] and [[carla,david],[aldo,beat],...].
 
     You may find more about this combinatorial problem in a good book on discrete mathematics under the term "multinomial coefficients".
     """
+    original = given.copy()
     actual = func(given, grouping)
     assert len(actual) == expected
+    assert given == original
 
 
 def test_lsort():
     """
     P28 (**) Sorting a list of lists according to length of sublists
-    a) We suppose that a list (InList) contains elements that are lists themselves. The objective is to sort the elements of InList according to their length. E.g. short lists first, longer lists later, or vice versa.
+    a) We suppose that a list (InList) contains elements that are lists themselves.
+    The objective is to sort the elements of InList according to their length. E.g. short lists first, longer lists later, or vice versa.
 
     Example:
     ?- lsort([[a,b,c],[d,e],[f,g,h],[d,e],[i,j,k,l],[m,n],[o]],L).
     L = [[o], [d, e], [d, e], [m, n], [a, b, c], [f, g, h], [i, j, k, l]]
 
-    b) Again, we suppose that a list (InList) contains elements that are lists themselves. But this time the objective is to sort the elements of InList according to their length frequency; i.e. in the default, where sorting is done ascendingly, lists with rare lengths are placed first, others with a more frequent length come later.
+    b) Again, we suppose that a list (InList) contains elements that are lists themselves.
+    But this time the objective is to sort the elements of InList according to their length frequency; i.e. in the default,
+    where sorting is done ascendingly, lists with rare lengths are placed first, others with a more frequent length come later.
 
     Example:
     ?- lfsort([[a,b,c],[d,e],[f,g,h],[d,e],[i,j,k,l],[m,n],[o]],L).
     L = [[i, j, k, l], [o], [a, b, c], [f, g, h], [d, e], [d, e], [m, n]]
 
-    Note that in the above example, the first two lists in the result L have length 4 and 1, both lengths appear just once. The third and forth list have length 3 which appears, there are two list of this length. And finally, the last three lists have length 2. This is the most frequent length.
+    Note that in the above example, the first two lists in the result L have length 4 and 1, both lengths appear just once.
+    The third and forth list have length 3 which appears, there are two list of this length.
+    And finally, the last three lists have length 2. This is the most frequent length.
     """
     skip("IMPLEMENT ME!!!")
