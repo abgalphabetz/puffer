@@ -10,7 +10,7 @@ from src.puffer.kata.p99.lists import find_last_pythonic, find_last, find_last_b
     insert_at_pythonic, insert_at, range_pythonic, rnd_select, rnd_permutation, combination, group3, group, \
     lsort_pythonic, lfsort_pythonic
 
-
+≠≠
 @pytest.mark.parametrize("given, expected", [
     ([1, 2, 3, 4], 4),
     (['a', 'b', 'c', 'd'], 'd'),
@@ -226,8 +226,8 @@ def test_duplicate_with_times():
     """
     given = ('a', 'b', 'c')
     expected = ['a', 'a', 'a', 'b', 'b', 'b', 'c', 'c', 'c']
-    duplicate_pythonic(given, 3) == expected
-    duplicate(given, 3) == expected
+    assert duplicate_pythonic(given, 3) == expected
+    assert duplicate(given, 3) == expected
 
 
 def test_drop():
