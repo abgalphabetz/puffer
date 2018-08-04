@@ -1,12 +1,12 @@
 from typing import List, Set, Sequence
 
 
-def find_last_pythonic(given: List):
+def find_last_pythonic(given: Sequence):
     return given[-1]
 
 
-def find_last(given: List):
-    def _find(_next: List):
+def find_last(given: Sequence):
+    def _find(_next: Sequence):
         if len(_next) == 1:
             return _next.pop()
         else:
@@ -15,17 +15,15 @@ def find_last(given: List):
     return _find(given)
 
 
-def find_last_but_one(given: List):
-    copy = given.copy()
-    copy.pop()
-    return find_last_pythonic(copy)
+def find_last_but_one(given: Sequence):
+    return find_last_pythonic(given[:-1])
 
 
-def element_at_pythonic(given: List, i: int):
+def element_at_pythonic(given: Sequence, i: int):
     return given[i - 1]
 
 
-def element_at(given: List, i: int):
+def element_at(given: Sequence, i: int):
     for j, elem in enumerate(given):
         if j + 1 == i:
             return elem
@@ -33,22 +31,22 @@ def element_at(given: List, i: int):
     raise ValueError
 
 
-def num_of_elements_pythonic(given: List):
+def num_of_elements_pythonic(given: Sequence):
     return len(given)
 
 
-def num_of_elements(given: List):
+def num_of_elements(given: Sequence):
     n = 0
     for _ in given:
         n += 1
     return n
 
 
-def reverse_pythonic(given: List):
+def reverse_pythonic(given: Sequence):
     return list(reversed(given))
 
 
-def reverse(given: List):
+def reverse(given: Sequence):
     result = [None] * len(given)
     for i, elem in enumerate(given):
         result[-(i + 1)] = elem
@@ -56,7 +54,7 @@ def reverse(given: List):
     return result
 
 
-def is_palindrome(given: List):
+def is_palindrome(given: Sequence):
     half = int(len(given) / 2)
     for i in range(0, half):
         if given[i] != given[-(i + 1)]:
@@ -64,7 +62,7 @@ def is_palindrome(given: List):
     return True
 
 
-def flatten(given: List):
+def flatten(given: Sequence):
     result = []
     for elem in given:
         if isinstance(elem, List):
@@ -76,59 +74,58 @@ def flatten(given: List):
     return result
 
 
-def compress_pythonic(given: List):
+def compress_pythonic(given: Sequence):
     from functools import reduce
     return reduce(lambda x, y: x if x and x[-1] == y else x + [y], given, [])
 
 
-def compress(given: List):
-    def _compress(src: List, dest: List):
+def compress(given: Sequence):
+    def _compress(src: Sequence, dest: Sequence):
         if not src:
             return dest
 
-        elem = src.pop(0)
+        elem, tail = src[0], src[1:]
         if not dest or elem != dest[-1]:
             dest.append(elem)
 
-        return _compress(src, dest)
+        return _compress(tail, dest)
 
-    compress = _compress(given.copy(), [])
-    return compress
+    return _compress(given, [])
 
 
-def _pack_append(_list: List[List], elem) -> List:
+def _pack_append(_list: Sequence[List], elem) -> List:
     _list[-1].append(elem)
     return _list
 
 
-def _pack_new(_list: List[List], elem) -> List:
+def _pack_new(_list: Sequence[List], elem) -> List:
     _list.append([elem])
     return _list
 
 
-def pack_pythonic(given: List):
+def pack_pythonic(given: Sequence):
     from functools import reduce
     return reduce(lambda x, y: _pack_append(x, y) if x and x[-1] and x[-1][-1] == y else _pack_new(x, y), given, [])
 
 
-def pack(given: List):
-    def _pack(src: List, dest: List):
+def pack(given: Sequence):
+    def _pack(src: Sequence, dest: Sequence):
         if not src:
             return dest
 
-        elem = src.pop(0)
+        elem, tail = src[0], src[1:]
         if dest and dest[-1] and dest[-1][-1] == elem:
-            return _pack(src, _pack_append(dest, elem))
-        return _pack(src, _pack_new(dest, elem))
+            return _pack(tail, _pack_append(dest, elem))
+        return _pack(tail, _pack_new(dest, elem))
 
-    return _pack(given.copy(), [])
+    return _pack(given, [])
 
 
-def encode_pythonic(given: List):
+def encode_pythonic(given: Sequence):
     return list(map(lambda l: [len(l), l[0]], pack(given)))
 
 
-def encode(given: List):
+def encode(given: Sequence):
     result = []
     for l in pack(given):
         result.append([len(l), l[0]])
@@ -136,11 +133,11 @@ def encode(given: List):
     return result
 
 
-def encode_modified_pythonic(given: List):
+def encode_modified_pythonic(given: Sequence):
     return [x if x[0] > 1 else x[1] for x in encode_pythonic(given)]
 
 
-def encode_modified(given: List):
+def encode_modified(given: Sequence):
     result = []
     for l in pack(given):
         size = len(l)
@@ -149,7 +146,7 @@ def encode_modified(given: List):
     return result
 
 
-def decode_pythonic(given: List):
+def decode_pythonic(given: Sequence):
     def _decode(elem) -> List:
         if isinstance(elem, List):
             return [elem[1]] * elem[0]
@@ -160,7 +157,7 @@ def decode_pythonic(given: List):
     return reduce(lambda x, y: x + _decode(y), given, [])
 
 
-def decode(given: List):
+def decode(given: Sequence):
     def _decode(elem) -> List:
         if isinstance(elem, List):
             return [elem[1]] * elem[0]
@@ -173,7 +170,7 @@ def decode(given: List):
     return result
 
 
-def encode_direct_pythonic(given: List):
+def encode_direct_pythonic(given: Sequence):
     def _encode_direct(x, y):
         if not x or x[-1][-1] != y:
             return x + [[1, y]]
@@ -186,23 +183,23 @@ def encode_direct_pythonic(given: List):
     return list(map(lambda x: x if x[0] > 1 else x[1], encoded))
 
 
-def duplicate_pythonic(given: List, times=2):
+def duplicate_pythonic(given: Sequence, times=2):
     from functools import reduce
     return reduce(lambda x, y: x + [y] * times, given, [])
 
 
-def duplicate(given: List, times=2):
+def duplicate(given: Sequence, times=2):
     result = []
     for elem in given:
         result += [elem] * times
     return result
 
 
-def drop_pythonic(given: List, nth: int):
+def drop_pythonic(given: Sequence, nth: int):
     return [elem for i, elem in enumerate(given) if (i + 1) % nth != 0]
 
 
-def drop(given: List, nth: int):
+def drop(given: Sequence, nth: int):
     result = []
     for i, elem in enumerate(given):
         if (i + 1) % nth != 0:
@@ -212,49 +209,49 @@ def drop(given: List, nth: int):
     return result
 
 
-def split_pythonic(given: List, n: int):
-    return given[:n], given[n:]
+def split_pythonic(given: Sequence, n: int):
+    return list(given[:n]), list(given[n:])
 
 
-def split(given: List, n: int):
+def split(given: Sequence, n: int):
     list1, list2 = [], []
     for i, elem in enumerate(given):
         (list1 if i < n else list2).append(elem)
     return list1, list2
 
 
-def slice_pythonic(given: List, start: int, end: int):
-    return given[start - 1:end]
+def slice_pythonic(given: Sequence, start: int, end: int):
+    return list(given[start - 1:end])
 
 
-def slice_diy(given: List, start: int, end: int):
+def slice_diy(given: Sequence, start: int, end: int):
     return [elem for i, elem in enumerate(given) if start - 1 <= i < end]
 
 
-def rotate_pythonic(given: List, n: int):
-    return given[n:] + given[:n]
+def rotate_pythonic(given: Sequence, n: int):
+    return list(given[n:]) + list(given[:n])
 
 
-def rotate(given: List, n: int):
+def rotate(given: Sequence, n: int):
     _n = n if n > 0 else len(given) + n
     ls = split(given, _n)
-    return ls[1] + ls[0]
+    return list(ls[1]) + list(ls[0])
 
 
-def remove_at_pythonic(given: List, kth: int):
+def remove_at_pythonic(given: Sequence, kth: int):
     return [x for i, x in enumerate(given) if i != kth - 1]
 
 
-def remove_at(given: List, kth: int):
+def remove_at(given: Sequence, kth: int):
     ls = split(given, kth - 1)
     return ls[0] + ls[1][1:]
 
 
-def insert_at_pythonic(elem, given: List, kth: int):
-    return given[:kth - 1] + [elem] + given[kth - 1:]
+def insert_at_pythonic(elem, given: Sequence, kth: int):
+    return list(given[:kth - 1]) + [elem] + list(given[kth - 1:])
 
 
-def insert_at(elem, given: List, kth: int):
+def insert_at(elem, given: Sequence, kth: int):
     ls = split(given, kth - 1)
     from itertools import chain
     return list(chain(ls[0], [elem], ls[1]))
@@ -264,17 +261,17 @@ def range_pythonic(start: int, end: int):
     return list(range(start, end + 1))
 
 
-def rnd_select(given: List, no_of_elements: int):
+def rnd_select(given: Sequence, no_of_elements: int):
     import random
     return random.sample(given, no_of_elements)
 
 
-def rnd_permutation(given: List):
+def rnd_permutation(given: Sequence):
     return rnd_select(given, len(given))
 
 
-def combination(given: List, r: int):
-    def _select(_given: List, _r):
+def combination(given: Sequence, r: int):
+    def _select(_given: Sequence, _r):
         if r <= 0 or not _given:
             return [[]]
 
@@ -288,18 +285,18 @@ def combination(given: List, r: int):
             return [_given]
         else:
             head, tail = _given[0], _given[1:]
-            return [[head] + s for s in _select(tail, _r - 1)] + _select(tail, _r)
+            return [[head] + list(s) for s in _select(tail, _r - 1)] + _select(tail, _r)
 
     return _select(given, r)
 
 
-def _split(_given: List, n: int) -> List:
+def _split(_given: Sequence, n: int) -> List:
     selected = combination(_given, n)
     result = [[s, list(set(_given) - set(s))] for s in selected]
     return result
 
 
-def group3(given: List, groups_of_3: List):
+def group3(given: Sequence, groups_of_3: Sequence):
     if len(groups_of_3) != 3 or len(given) != sum(groups_of_3):
         raise ValueError
 
@@ -313,8 +310,8 @@ def group3(given: List, groups_of_3: List):
     return flattened
 
 
-def group(given: List, groups: List):
-    def _group(_given: List, _groups: List):
+def group(given: Sequence, groups: Sequence):
+    def _group(_given: Sequence, _groups: Sequence):
         if not _groups:
             return [[[]]]
 
@@ -334,11 +331,11 @@ def group(given: List, groups: List):
     return flattened
 
 
-def lsort_pythonic(given: List):
+def lsort_pythonic(given: Sequence):
     return sorted(given, key=lambda x: len(x))
 
 
-def lfsort_pythonic(given: List):
+def lfsort_pythonic(given: Sequence):
     l = [len(x) for x in given]
     f = [(z[0], z[1]) for z in zip(given, l)]
 
