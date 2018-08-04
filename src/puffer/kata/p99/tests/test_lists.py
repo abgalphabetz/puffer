@@ -10,7 +10,7 @@ from src.puffer.kata.p99.lists import find_last_pythonic, find_last, find_last_b
     insert_at_pythonic, insert_at, range_pythonic, rnd_select, rnd_permutation, combination, group3, group, \
     lsort_pythonic, lfsort_pythonic
 
-≠≠
+
 @pytest.mark.parametrize("given, expected", [
     ([1, 2, 3, 4], 4),
     (['a', 'b', 'c', 'd'], 'd'),
