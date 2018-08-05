@@ -8,7 +8,7 @@ def find_last_pythonic(given: Sequence):
 def find_last(given: Sequence):
     def _find(_next: Sequence):
         if len(_next) == 1:
-            return _next.pop()
+            return _next[-1]
         else:
             return _find(_next[1:])
 
@@ -235,7 +235,7 @@ def rotate_pythonic(given: Sequence, n: int):
 def rotate(given: Sequence, n: int):
     _n = n if n > 0 else len(given) + n
     ls = split(given, _n)
-    return list(ls[1]) + list(ls[0])
+    return ls[1] + ls[0]
 
 
 def remove_at_pythonic(given: Sequence, kth: int):

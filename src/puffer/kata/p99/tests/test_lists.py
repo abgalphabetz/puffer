@@ -12,8 +12,8 @@ from src.puffer.kata.p99.lists import find_last_pythonic, find_last, find_last_b
 
 
 @pytest.mark.parametrize("given, expected", [
-    ([1, 2, 3, 4], 4),
-    (['a', 'b', 'c', 'd'], 'd'),
+    ((1, 2, 3, 4), 4),
+    (('a', 'b', 'c', 'd'), 'd'),
 ])
 def test_find_last(given: List, expected):
     """
@@ -55,8 +55,8 @@ def test_element_at(given, i, expected):
 
 
 @pytest.mark.parametrize("given, expected", [
-    ([1, 2, 3, 4], 4),
-    (['a', 'b', 'c', 'd'], 4)
+    ((1, 2, 3, 4), 4),
+    (('a', 'b', 'c', 'd'), 4)
 ])
 def test_num_of_elements(given, expected):
     """
@@ -67,8 +67,8 @@ def test_num_of_elements(given, expected):
 
 
 @pytest.mark.parametrize("given, expected", [
-    ([1, 2, 3, 4], [4, 3, 2, 1]),
-    (['a', 'b', 'c', 'd'], ['d', 'c', 'b', 'a']),
+    ((1, 2, 3, 4), [4, 3, 2, 1]),
+    (('a', 'b', 'c', 'd'), ['d', 'c', 'b', 'a']),
 ])
 def test_reverse(given, expected):
     """
@@ -79,9 +79,9 @@ def test_reverse(given, expected):
 
 
 @pytest.mark.parametrize("given, expected", [
-    ([1, 2, 3, 4], False),
+    ((1, 2, 3, 4), False),
     ([1, 2, 3, 2, 1], True),
-    (['a', 'b', 'c', 'd'], False),
+    (('a', 'b', 'c', 'd'), False),
     (['a', 'b', 'c', 'b', 'a'], True),
 ])
 def test_palindrome(given, expected):
