@@ -1,4 +1,5 @@
 from collections import Sequence
+from typing import List
 
 
 def merge_sort(given: Sequence):
@@ -12,17 +13,14 @@ def merge_sort(given: Sequence):
     left = merge_sort(given_list[0:k])
     right = merge_sort(given_list[k:])
 
-    tmp = []
-    lnext, lsize = 0, len(left)
-    rnext, rsize = 0, len(right)
-    for i in range(0, lsize+rsize):
-        if lnext == lsize and rnext < rsize:
-            tmp.extend(right[rnext:])
-            break
-        elif rnext == rsize and lnext < lsize:
-            tmp.extend(left[lnext:])
-            break
+    return _merge_sorted_lists(left, right)
 
+
+def _merge_sorted_lists(left: List, right: List):
+    tmp = []
+    lnext = 0
+    rnext = 0
+    while lnext < len(left) and rnext < len(right):
         if left[lnext] <= right[rnext]:
             tmp.append(left[lnext])
             lnext += 1
@@ -30,5 +28,10 @@ def merge_sort(given: Sequence):
             tmp.append(right[rnext])
             rnext += 1
 
-    return tmp
+    if rnext < len(right):
+        tmp.extend(right[rnext:])
 
+    if lnext < len(left):
+        tmp.extend(left[lnext:])
+
+    return tmp
